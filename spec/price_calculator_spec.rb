@@ -15,7 +15,25 @@ describe PriceCalculator do
     expect(subject.checkout([1,1])).to eq 16
   end
 
-  it 'applies 5% discount when cart contains 2 distinct books' do
-    expect(subject.checkout([1,2])).to eq 15.2
+  context 'when cart contains 2 distinct books' do
+    it 'applies 5% discount on distinct book lot' do
+      expect(subject.checkout([1, 2])).to eq 15.2
+    end
+
+    xit ' does not apply discount on duplicate copies' do
+      expect(subject.checkout([1, 2, 2])).to eq 23.2
+    end
+  end
+
+  describe '.cart_lots' do
+    it 'decomposes cart into lots of distinct books' do
+      cart = [1, 2, 2]
+      expect(subject.cart_lots(cart)).to eq [[1, 2], [2]]
+    end
+
+    it 'decomposes cart into more lots' do
+      cart = [1, 2, 1, 2, 2]
+      expect(subject.cart_lots(cart)).to eq [[1, 2], [1, 2], [2]]
+    end
   end
 end
